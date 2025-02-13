@@ -26,7 +26,7 @@ columns_needed = [
 query = f"""
     SELECT {', '.join(columns_needed)}
     FROM ax500
-    WHERE sorbent_name LIKE 'PUR%' OR sorbent_name LIKE 'NGK%'
+    WHERE sorbent_name LIKE 'PUR%%' OR sorbent_name LIKE 'NGK%%'
 """
 data = pd.read_sql(query, engine)
 
