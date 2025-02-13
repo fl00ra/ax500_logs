@@ -21,7 +21,7 @@ pip install pandas mysql-connector-python SQLAlchemy google-auth google-auth-oau
 ```
 
 ### **3. Database Deployment**
-The database is currently only deployed on a local laptop. Upon handing over the project, the database will be exported as an `.sql` file and stored in this repository. To set up the database on a new machine:
+The database is currently only deployed on a local machine. Upon handing over the project, the database will be exported as an `.sql` file and stored in this repository. To set up the database on a new machine:
 
 1. Install MySQL Server.
 2. Clone this repository and navigate to the directory containing the `.sql` file.
@@ -45,14 +45,18 @@ These scripts manage data retrieval, processing, and insertion into the MySQL da
 
 - **`import_check_totalrecord.py`** - Scans the logs directory, validates files, and counts total records.
 - **`import_create_table.py`** - Creates a MySQL table based on the structure of a sample CSV file.
-- **`import_data_api.py`** - Automatically uploads and updates new experimental data from Google Drive to the database.
+- **`import_data_api.py`** - Automatically uploads and updates new experimental data from Google Drive to the database. Since this involves API authentication, the credentials file (`.json`) is **not included** in the repository for security reasons. To set up API access:
+  1. Create a Google Cloud Service Account.
+  2. Enable Google Drive API.
+  3. Download the credentials JSON file and place it in the repository folder.
+  4. Update the script to reference your new credentials file.
 - **`import_data_ax500_update.py`** - Reads CSV/XLSX files, preprocesses data, and inserts it into the `ax500` table.
 
 ### **Machine Learning Scripts (`ML_*.py`)**
 These scripts apply machine learning models to detect anomalies in experimental data.
 
-- **`ML_prepare.py`** - Extracts required columns from MySQL, processes missing values, and prepares data for modeling.
-- **(Future ML scripts)** - More scripts can be added for training and evaluating ML models.
+- **`ML_preprocessing.py`** - Extracts required columns from MySQL, processes missing values, and prepares data for modeling.
+- 
 
 ---
 ## **Usage Instructions**
@@ -69,7 +73,7 @@ Run the following command to fetch new experimental data from Google Drive and u
 ```sh
 python import_data_api.py
 ```
-This will ensure that the latest experiment records are always available in the database.
+Since this script requires Google API access, ensure your credentials JSON file is correctly set up.
 
 ### **3. Train Machine Learning Model**
 Once data is imported, you can run:
@@ -81,6 +85,7 @@ This script fetches data from the MySQL database, processes missing values, and 
 ---
 ## **Troubleshooting**
 - **MySQL Connection Issues:** If you face authentication errors, check if MySQL is correctly installed and the database is imported.
+- **Google API Authentication Issues:** Ensure your credentials JSON file is in place and the service account has access to the Google Drive folder.
 - **Missing Dependencies:** Ensure all required packages are installed manually using `pip install` as mentioned above.
 - **File Format Errors:** Make sure your CSV/XLSX files are correctly formatted before importing.
 
