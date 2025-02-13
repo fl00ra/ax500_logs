@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine, text
 import re
+from sqlalchemy.exc import IntegrityError
 
 # Database configuration
 DB_USER = 'root'
@@ -11,7 +12,7 @@ DB_NAME = 'experiment_data'
 
 engine = create_engine(f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}')
 
-# Folder path for logs
+# Folder path for logs (also can be changed to google drive api link)
 folder_path = "C:\\Users\\flora\\datareview\\logs"
 
 # Excluded folders and keywords
@@ -108,10 +109,12 @@ def import_file(file_path, conn, existing_columns, batch_size=100):
             batch = df.iloc[start:start + batch_size]
             try:
                 batch.to_sql('ax500', engine, if_exists='append', index=False, method='multi')
-            except IntegrityError as e:
-                print(f"Skipping duplicate rows: {e}")
+
+            except IntegrityError:
+                print(f"Skipping file due to duplicate rows: {file_path}")
 
         print(f"Successfully imported: {file_path} (sorbent: {sorbent_name}, round: {test_round})")
+        
     except Exception as e:
         print(f"Error importing {file_path}: {e}")
 
