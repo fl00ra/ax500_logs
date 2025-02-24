@@ -35,6 +35,11 @@ The database is currently only deployed on a local machine. Upon handing over th
    ```
    (Replace `experiment_data_dump.sql` with the actual filename.)
 
+The latest AX500 database dump is available for download:
+
+[Download ax500_database_dump.zip](https://github.com/fl00ra/ax500_logs/releases/download/dump-2024-02-24/ax500_database_dump.zip)**
+
+
 Since the new setup is independent of the original machine, database credentials (`DB_USER`, `DB_PASSWORD`) in Python scripts can be removed or adjusted accordingly.
 
 ---
