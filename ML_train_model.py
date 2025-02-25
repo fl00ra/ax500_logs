@@ -22,8 +22,7 @@ scaler = StandardScaler()
 data_scaled = scaler.fit_transform(data[features_used])
 
 # Train the Isolation Forest model
-#model = IsolationForest(n_estimators=100, contamination=0.05, random_state=42)  # Set contamination to 5%
-model = IsolationForest(n_estimators=100, contamination=0.005, random_state=42) 
+model = IsolationForest(n_estimators=100, contamination=0.05, random_state=42)  # Set contamination to 5%
 model.fit(data_scaled)
 
 # Predict anomalies (1 for normal, -1 for anomaly)
