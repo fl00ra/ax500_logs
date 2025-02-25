@@ -3,46 +3,46 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import IsolationForest
 
-# read the processed data
 with open("processed_data.pkl", "rb") as f:
     data = pickle.load(f)
 
-# select numeric columns (excluding id and TheTime)
-numeric_cols = [col for col in data.columns if col not in ["id", "TheTime"]]
+features_used = [
+    "co2_diff",  # CO₂ removal efficiency
+    "t_diff",  # Temperature change
+    "rate_h2o_diff",  # Water input-output rate difference
+    "rh_inlet_diff", "rh_pre_diff", "rh_post_diff",  # Humidity differences
+    "h2o_licor_diff", "co2_licor_diff",  # Licor-measured H₂O & CO₂ changes
+    "flow1_corrected_m3hr", "dp_cart",  # Flow rate & pressure
+    "mass_co2", "rate_co2_inlet", "rate_co2_mol_h", "mass_h2o",  # Other stable process variables
+    "cumulative_mass_co2", "mass_co2_licor", "mass_h2o_licor"
+]
 
-# data scaling
+# Data scaling
 scaler = StandardScaler()
-data_scaled = scaler.fit_transform(data[numeric_cols])
+data_scaled = scaler.fit_transform(data[features_used])
 
-# train the isolation forest model
-model = IsolationForest(n_estimators=100, contamination='auto', random_state=42)
+# Train the Isolation Forest model
+#model = IsolationForest(n_estimators=100, contamination=0.05, random_state=42)  # Set contamination to 5%
+model = IsolationForest(n_estimators=100, contamination=0.005, random_state=42) 
 model.fit(data_scaled)
 
-# predict anomalies (1 for normal, -1 for anomaly)
+# Predict anomalies (1 for normal, -1 for anomaly)
 data["anomaly"] = model.predict(data_scaled)
 
-# get the anomaly score (the lower, the more abnormal)
+# Get the anomaly score (the lower, the more abnormal)
 data["anomaly_score"] = model.decision_function(data_scaled)
 
-# filter out the anomalies
+# Filter out the anomalies
 anomalies = data[data["anomaly"] == -1]
 
-# get the top 5% anomalies
-top_anomalies = anomalies.nsmallest(int(len(data) * 0.05), "anomaly_score")
+# Get the top 5% most abnormal anomalies
+top_anomalies = anomalies.nsmallest(int(len(anomalies) * 0.05), "anomaly_score")
 
-# export the anomalies data
-# data.to_excel("anomalies data.xlsx", index=False)
+# Export anomalies data
 anomalies.to_excel("anomalies_data.xlsx", index=False)
 
-# save the model results
+# Save the model results for visualization
 with open("model_results.pkl", "wb") as f:
     pickle.dump(data, f)
 
-print("Successfully stored in anomalies data.xlsx")
-
-
-
-
-
-
-
+print("Successfully stored anomalies in anomalies_data.xlsx")
