@@ -23,6 +23,7 @@ pip install pandas mysql-connector-python SQLAlchemy google-auth google-auth-oau
 ### **3. Database Deployment**
 The database is currently only deployed on a local machine. Upon handing over the project, the database will be exported as an `.sql` file and stored in this repository. To set up the database on a new machine:
 
+#### Option 1: Using MySQL Command Line
 1. Install MySQL Server.
 2. Clone this repository and navigate to the directory containing the `.sql` file.
 3. Create a new database in MySQL:
@@ -31,13 +32,23 @@ The database is currently only deployed on a local machine. Upon handing over th
    ```
 4. Import the existing database dump:
    ```sh
-   mysql -u root -p experiment_data < experiment_data_dump.sql
+   mysql -u root -p experiment_data < database_dump.sql
    ```
-   (Replace `experiment_data_dump.sql` with the actual filename.)
+   (Replace `database_dump.sql` with the actual filename.)
+
+#### Option 2: Using MySQL Workbench
+
+Alternatively, you can import the database using MySQL Workbench:
+
+1. Open MySQL Workbench and connect to your MySQL server.
+2. Navigate to Server → Data Import.
+3. Select "Import from Self-Contained File" and choose the .sql file.
+4. Select the target schema (experiment_data), or create a new one if necessary.
+5. Click Start Import and wait for the process to complete.
 
 The latest AX500 database dump is available for download:
 
-[Download ax500_database_dump.zip](https://github.com/fl00ra/ax500_logs/releases/download/dump-2024-02-24/ax500_database_dump.zip)
+[Download ax500_database_dump.zip](https://github.com/fl00ra/ax500_logs/releases/tag/dump-2024-02-24)
 
 ---
 ## **Script Descriptions**
